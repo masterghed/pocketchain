@@ -3,7 +3,7 @@
 // Professional DeFi Platform with Firebase
 // ==========================================
 
-import { auth, onAuthStateChanged } from './firebase-config.js';
+import { auth, onAuthStateChanged, increment, serverTimestamp } from './firebase-config.js';
 import {
   registerUser,
   loginUser,
@@ -22,7 +22,6 @@ import {
   claimDailyReward,
   getUserKYC
 } from './modules/firestore.js';
-import { serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 // ==========================================
 // GLOBAL STATE
