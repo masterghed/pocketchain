@@ -3211,3 +3211,36 @@ body.light-mode ::-webkit-scrollbar-thumb { border-color: #f0f4f8; }
     .convert-input-row .convert-currency-select,
     .convert-input-row .convert-currency-dropdown { width: 100%; }
 }
+
+/* Google Button Style */
+.btn-google {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    color: #333333;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-google:hover {
+    background-color: #f1f1f1;
+}
+
+.btn-google:active {
+    transform: scale(0.98);
+}
+
+.btn-google i {
+    color: #4285F4;
+    font-size: 1.1rem;
+}
