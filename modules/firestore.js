@@ -145,7 +145,6 @@ export async function getUserStakes(uid) {
     collection(db, STAKES_COLLECTION),
     where('userId', '==', uid),
     where('status', '==', 'active'),
-    orderBy('createdAt', 'desc')
   );
   
   const snapshot = await getDocs(q);
@@ -162,7 +161,6 @@ export function subscribeToUserStakes(uid, callback) {
     collection(db, STAKES_COLLECTION),
     where('userId', '==', uid),
     where('status', '==', 'active'),
-    orderBy('createdAt', 'desc')
   );
   
   return onSnapshot(q, (snapshot) => {
@@ -322,7 +320,6 @@ export async function getUserTransactions(uid, limitCount = 50) {
   const q = query(
     collection(db, TRANSACTIONS_COLLECTION),
     where('userId', '==', uid),
-    orderBy('createdAt', 'desc'),
     limit(limitCount)
   );
   
