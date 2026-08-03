@@ -14,7 +14,8 @@ import {
     doc,
     updateDoc,
     onSnapshot,
-    serverTimestamp 
+    serverTimestamp,
+    Timestamp 
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 // Firebase Configuration
@@ -258,7 +259,8 @@ window.approveKYC = async (kycId, userId) => {
         // Update KYC status
         await updateDoc(doc(db, 'kyc_submissions', kycId), {
             status: 'verified',
-            reviewedAt: serverTimestamp(),
+            reviewedAt: serverTimestamp,
+    Timestamp(),
             reviewedBy: 'admin'
         });
         
@@ -285,7 +287,8 @@ window.rejectKYC = async (kycId) => {
     try {
         await updateDoc(doc(db, 'kyc_submissions', kycId), {
             status: 'rejected',
-            reviewedAt: serverTimestamp(),
+            reviewedAt: serverTimestamp,
+    Timestamp(),
             rejectionReason: reason || 'Application rejected'
         });
         

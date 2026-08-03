@@ -1181,3 +1181,44 @@ async function renderActiveStakes(userId) {
       stakesList.innerHTML = html;
     });
 }
+
+// === AUTO-FIXED BY TERMUX SCRIPT ===
+window.copyDepositAddress = () => {
+    const address = document.getElementById('depositAddress')?.value;
+    if (address && address !== 'Not connected' && address !== '') {
+        navigator.clipboard.writeText(address).then(() => {
+            showToast('Copied!', 'Wallet address copied to clipboard');
+        }).catch(() => {
+            showToast('Error', 'Failed to copy', 'error');
+        });
+    } else {
+        showToast('Error', 'No wallet address available', 'error');
+    }
+};
+
+window.loadTransactionHistory = async () => {
+    if (!AppState.currentUser) return;
+    try {
+        const { getUserTransactions } = await import('./modules/firestore.js');
+        const transactions = await getUserTransactions(AppState.currentUser.uid, 20);
+        const container = document.getElementById('transactionHistory');
+        if (!container) return;
+        if (!transactions || transactions.length === 0) {
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-exchange-alt"></i><p>No transactions yet</p></div>';
+            return;
+        }
+        container.innerHTML = transactions.map(tx => {
+            const date = tx.createdAt?.toDate ? tx.createdAt.toDate().toLocaleDateString() : 'Recently';
+            const isPositive = tx.amount > 0;
+            const color = isPositive ? 'var(--secondary)' : 'var(--danger)';
+            const sign = isPositive ? '+' : '';
+            return '<div class="info-row" style="margin-bottom:8px;align-items:center;"><div style="flex:1;"><div style="font-weight:600;font-size:0.9rem;">' + (tx.type || 'Transaction') + '</div><div style="font-size:0.75rem;color:var(--text-muted);">' + (tx.description || '') + ' • ' + date + '</div></div><div style="color:' + color + ';font-weight:700;font-size:0.95rem;">' + sign + tx.amount + ' PCH</div></div>';
+        }).join('');
+    } catch (e) { console.error('TX load error:', e); }
+};
+
+setInterval(() => {
+    if (AppState.currentUser && document.getElementById('asset')?.classList.contains('active')) {
+        if (!window._txLoaded) { window._txLoaded = true; loadTransactionHistory(); }
+    } else { window._txLoaded = false; }
+}, 2000);

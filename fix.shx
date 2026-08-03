@@ -1,0 +1,108 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# ========================================== POCKETCHAIN AUTO-FIX & 
+# DEPLOY SCRIPT Para sa Termux → GitHub 
+# ==========================================
+clear echo "🔷 PocketChain Termux Auto-Fixer" echo 
+"================================="
+# --- KONFIGURASYON (Pwede mong baguhin) ---
+REPO_URL="https://github.com/masterghed/pocketchain.git" 
+REPO_DIR="$HOME/pocketchain" BRANCH="main"
+# --- CHECK PREREQUISITES ---
+if ! command -v git &> /dev/null; then echo "📦 Nag-iinstall ng git..." 
+    pkg update -y && pkg install git -y
+fi
+# --- GIT SETUP (Kung wala pa) ---
+if [ -z "$(git config --global user.name 2>/dev/null)" ]; then echo "⚙️ 
+    Setting up git..." git config --global user.name "PocketChain Dev" 
+    git config --global user.email "dev@pocketchain.local"
+fi
+# --- CLONE O PULL ---
+if [ -d "$REPO_DIR/.git" ]; then echo "📁 May repo na. Nagpa-pull ng 
+    latest..." cd "$REPO_DIR" git stash 2>/dev/null git pull origin 
+    "$BRANCH" 2>/dev/null || echo "⚠️ Pull failed, continuing..."
+else echo "📥 Nag-clone ng repo..." git clone "$REPO_URL" "$REPO_DIR" cd 
+    "$REPO_DIR"
+fi echo "" echo "🔧 Nag-a-apply ng fixes..."
+# ========================================== FIX #1: CRITICAL - Gawin 
+# ang modules/ folder Ang app.js at kyc.js ay nag-i-import mula sa 
+# ./modules/auth.js, ./modules/firestore.js, ./modules/storage.js Pero 
+# ang files ay nasa root! Kaya nag-e-error. 
+# ==========================================
+mkdir -p modules if [ -f "auth.js" ]; then cp auth.js modules/auth.js 
+    echo "✅ modules/auth.js created"
+fi if [ -f "firestore.js" ]; then cp firestore.js modules/firestore.js 
+    echo "✅ modules/firestore.js created"
+fi if [ -f "storage.js" ]; then cp storage.js modules/storage.js echo 
+    "✅ modules/storage.js created"
+fi
+# ========================================== FIX #2: Dagdag ng 
+# nawawalang functions sa app.js 
+# ==========================================
+cat >> app.js << 'APPEOF'
+// ========================================== AUTO-FIXED BY TERMUX 
+// SCRIPT ==========================================
+/** * Copy wallet deposit address to clipboard */ 
+window.copyDepositAddress = () => {
+    const address = document.getElementById('depositAddress')?.value; if 
+    (address && address !== 'Not connected' && address !== '') {
+        navigator.clipboard.writeText(address).then(() => { 
+            showToast('Copied!', 'Wallet address copied to clipboard');
+        }).catch(() => {
+            showToast('Error', 'Failed to copy address', 'error');
+        });
+    } else {
+        showToast('Error', 'No wallet address available', 'error');
+    }
+};
+/** * Load and display transaction history from Firestore */ 
+window.loadTransactionHistory = async () => {
+    if (!AppState.currentUser) return; try { const { getUserTransactions 
+        } = await import('./modules/firestore.js');
+        const transactions = await 
+        getUserTransactions(AppState.currentUser.uid, 20); const 
+        container = document.getElementById('transactionHistory'); if 
+        (!container) return;
+        
+        if (!transactions || transactions.length === 0) { 
+            container.innerHTML = `
+                <div class="empty-state"> <i class="fas 
+                    fa-exchange-alt"></i> <p>No transactions yet</p>
+                </div> `; return;
+        }
+        
+        container.innerHTML = transactions.map(tx => { const date = 
+            tx.createdAt?.toDate
+                ? tx.createdAt.toDate().toLocaleDateString()
+                : 'Recently';
+            const isPositive = tx.amount > 0; const amountColor = 
+            isPositive ? 'var(--secondary)' : 'var(--danger)'; const 
+            sign = isPositive ? '+' : '';
+            
+            return ` <div class="info-row" 
+                style="margin-bottom:8px;align-items:center;">
+                    <div style="flex:1;"> <div 
+                        style="font-weight:600;font-size:0.9rem;">${tx.type 
+                        || 'Transaction'}</div>
+                        <div 
+                        style="font-size:0.75rem;color:var(--text-muted);">
+                            ${tx.description || ''} • ${date} </div> 
+                    </div> <div 
+                    style="color:${amountColor};font-weight:700;font-size:0.95rem;">
+                        ${sign}${tx.amount} PCH </div> </div> `;
+        }).join('');
+    } catch (error) {
+        console.error('Load transactions error:', error);
+    }
+};
+// Auto-load transactions kapag nasa wallet page
+setInterval(() => { if (AppState.currentUser && 
+    document.getElementById('asset')?.classList.contains('active')) {
+        if (!window._txLoaded) { window._txLoaded = true; 
+            loadTransactionHistory();
+        }
+    } else {
+        window._txLoaded = false;
+    }
+}, 2000);
+APPEOF
+echo "✅ Missing functions added to app.js"

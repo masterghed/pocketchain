@@ -4,7 +4,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, getDocs, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, getDocs, increment, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js";
 
 const firebaseConfig = {
