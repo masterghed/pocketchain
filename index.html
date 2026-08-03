@@ -1005,41 +1005,7 @@
     <!-- MODALS -->
 
     <!-- Auth Modal -->
-    <div class="modal" id="authModal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeAuthModal()"><i class="fas fa-times"></i></button>
-            
-            <div id="loginForm">
-                <div class="modal-header">
-                    <h3 class="modal-title">Welcome Back</h3>
-                    <p class="modal-subtitle">Sign in to your PocketChain account</p>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" class="form-input" id="loginEmail" placeholder="Enter your email">
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <div class="password-wrapper">
-                            <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password">
-                            <button class="toggle-password" onclick="togglePassword('loginPassword', this)">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-
-        <!-- Google Login Button -->
-        <button type="button" class="btn-google" onclick="handleGoogleLogin()">
-            <i class="fab fa-google"></i> Connect with Google
-        </button>
-                    <div class="error-msg" id="loginError"></div>
-                    <button class="btn-submit" onclick="handleLogin()">Sign In</button>
-                    <div class="auth-switch">
-                        Don't have an account? <a onclick="switchAuth('signup')">Create one</a>
-                    </div>
-                </div>
-            </div>
+    <div class="modal" id="authModal"><div class="modal-content"><button class="close-modal" onclick="closeAuthModal()"><i class="fas fa-times"></i></button><div id="loginForm"><div class="modal-header"><h3 class="modal-title">Welcome Back</h3><p class="modal-subtitle">Sign in to your PocketChain account</p></div><div class="modal-body"><div class="form-group"><label>Email</label><input type="email" class="form-input" id="loginEmail" placeholder="Enter your email"></div><div class="form-group"><label>Password</label><div class="password-wrapper"><input type="password" class="form-input" id="loginPassword" placeholder="Enter your password"><button class="toggle-password" onclick="togglePassword('loginPassword', this)"><i class="fas fa-eye"></i></button></div></div><button type="button" class="btn-google" onclick="handleGoogleLogin()"><i class="fab fa-google"></i> Connect with Google</button><div class="error-msg" id="loginError"></div><button class="btn-submit" onclick="handleLogin()">Sign In</button><div class="auth-switch">Don't have an account? <a onclick="switchAuth('signup')">Create one</a></div></div></div><div id="signupForm" style="display: none;"><div class="modal-header"><h3 class="modal-title">Create Account</h3><p class="modal-subtitle">Join the PocketChain ecosystem</p></div><div class="modal-body"><div class="name-row"><div class="form-group"><label>First Name</label><input type="text" class="form-input" id="regFirstName" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-input" id="regLastName" placeholder="Last name"></div></div><div class="form-group"><label>Email Address</label><input type="email" class="form-input" id="regEmail" placeholder="your@email.com"></div><div class="form-group"><label>Birth Date</label><div class="date-row"><select class="date-select" id="regDay"><option value="">Day</option></select><select class="date-select" id="regMonth"><option value="">Month</option></select><select class="date-select" id="regYear"><option value="">Year</option></select></div></div><div class="form-group"><label>Age (Auto-calculated)</label><input type="number" class="form-input" id="regAge" placeholder="Must be 18 or older" min="18" readonly></div><div class="form-group"><label>Password</label><div class="password-wrapper"><input type="password" class="form-input" id="regPassword" placeholder="Min 6 characters"><button class="toggle-password" onclick="togglePassword('regPassword', this)"><i class="fas fa-eye"></i></button></div><div class="password-strength-container"><div class="strength-bar-bg"><div class="strength-bar" id="passwordStrength"></div></div><span class="strength-text" id="strengthText"></span></div></div><div class="form-group"><label>Confirm Password</label><div class="password-wrapper"><input type="password" class="form-input" id="regConfirmPassword" placeholder="Confirm password"><button class="toggle-password" onclick="togglePassword('regConfirmPassword', this)"><i class="fas fa-eye"></i></button></div></div><div class="error-msg" id="signupError"></div><button class="btn-submit" onclick="handleSignup()">Create Account</button><div class="auth-switch">Already have an account? <a onclick="switchAuth('signup')">Sign in</a></div></div></div></div></div>
 
             <div id="signupForm" style="display: none;">
                 <div class="modal-header">
